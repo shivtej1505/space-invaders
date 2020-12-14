@@ -1,3 +1,5 @@
+require_relative 'missile'
+
 class Ship
   def initialize
     @image = Gosu::Image.new("app/assets/images/rocket.png")
@@ -19,6 +21,10 @@ class Ship
 
   def move_down
     @y += @vel_y
+  end
+
+  def fire
+    Missile.new(x: @x, y: @y, vel_y: -1)
   end
 
   def draw

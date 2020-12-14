@@ -8,6 +8,7 @@ require_relative 'components/invader'
 # 3. Implement missile launch system from invaders
 # 4. Score system
 # 5. Game start/pause/end system
+# 6. collision detection
 
 class Game < Gosu::Window
   def initialize
@@ -16,6 +17,7 @@ class Game < Gosu::Window
 
     @ship = Ship.new
     @invaders = 1.upto(10).map {|num| Invader.new(x: num*30) }
+    @missiles = []
   end
 
   def update
@@ -33,8 +35,16 @@ class Game < Gosu::Window
       exit
     end
 
+    if Gosu.button_down? Gosu::KB_SPACE
+      @missiles << @ship.fire
+    end
+
     @invaders.each do |invader|
       invader.move
+    end
+
+    @missiles.each do |missile|
+      missile.move
     end
   end
 
@@ -42,6 +52,10 @@ class Game < Gosu::Window
     @ship.draw
     @invaders.each do |invader|
       invader.draw
+    end
+
+    @missiles.each do |missile|
+      missile.draw
     end
   end
 end
