@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Missile
   def initialize(x:, y:, vel_y:)
-    @image = Gosu::Image.new("app/assets/images/rocket.png")
+    @image = Gosu::Image.new('app/assets/images/rocket.png')
     @x = x
     @y = y
     @vel_y = vel_y
@@ -13,5 +15,4 @@ class Missile
   def draw
     @image.draw(@x, @y, 1)
   end
-
 end

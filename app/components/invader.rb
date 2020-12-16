@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Invader
   def initialize(x: 0.0, y: 0.0)
-    @image = Gosu::Image.new("app/assets/images/invader.png")
+    @image = Gosu::Image.new('app/assets/images/invader.png')
     @x = x
     @y = y
     @vel_x = 1

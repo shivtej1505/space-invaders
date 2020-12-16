@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require_relative 'missile'
 
 class Ship
   def initialize
-    @image = Gosu::Image.new("app/assets/images/rocket.png")
+    @image = Gosu::Image.new('app/assets/images/rocket.png')
     @x = @y = 240
     @vel_x = @vel_y = 1
   end

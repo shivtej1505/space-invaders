@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'gosu'
 require_relative 'components/ship'
 require_relative 'components/invader'
@@ -13,61 +15,41 @@ require_relative 'components/invader'
 class Game < Gosu::Window
   def initialize
     super(640, 480)
-    self.caption = "Space Invaders"
+    self.caption = 'Space Invaders'
 
     @ship = Ship.new
-    @invaders = 1.upto(10).map {|num| Invader.new(x: num*30) }
+    @invaders = 1.upto(10).map { |num| Invader.new(x: num * 30) }
     @missiles = []
     @paused = false
     @font = Gosu::Font.new(20)
   end
 
   def update
-    if Gosu.button_down? Gosu::KB_ESCAPE
-      exit
-    end
+    exit if Gosu.button_down? Gosu::KB_ESCAPE
 
-    if Gosu.button_down? Gosu::KB_P
-      @paused = !@paused
-    end
+    @paused = !@paused if Gosu.button_down? Gosu::KB_P
 
-    if !@paused
-      if Gosu.button_down? Gosu::KB_LEFT or Gosu::button_down? Gosu::GP_LEFT
-        @ship.move_left
-      end
-      if Gosu.button_down? Gosu::KB_RIGHT or Gosu::button_down? Gosu::GP_RIGHT
-        @ship.move_right
-      end
-      if Gosu.button_down? Gosu::KB_UP or Gosu::button_down? Gosu::GP_BUTTON_0
-        @ship.move_up
-      end
+    unless @paused
+      @ship.move_left if Gosu.button_down?(Gosu::KB_LEFT) || Gosu.button_down?(Gosu::GP_LEFT)
+      @ship.move_right if Gosu.button_down?(Gosu::KB_RIGHT) || Gosu.button_down?(Gosu::GP_RIGHT)
+      @ship.move_up if Gosu.button_down?(Gosu::KB_UP) || Gosu.button_down?(Gosu::GP_BUTTON_0)
 
-      if Gosu.button_down? Gosu::KB_SPACE
-        @missiles << @ship.fire
-      end
+      @missiles << @ship.fire if Gosu.button_down? Gosu::KB_SPACE
 
-      @invaders.each do |invader|
-        invader.move
-      end
+      @invaders.each(&:move)
 
-      @missiles.each do |missile|
-        missile.move
-      end
+      @missiles.each(&:move)
     end
   end
 
   def draw
     if @paused
-      @font.draw_text("Paused", 100, 100, 1)
+      @font.draw_text('Paused', 100, 100, 1)
     else
       @ship.draw
-      @invaders.each do |invader|
-        invader.draw
-      end
+      @invaders.each(&:draw)
 
-      @missiles.each do |missile|
-        missile.draw
-      end
+      @missiles.each(&:draw)
     end
   end
 end
