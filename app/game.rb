@@ -6,7 +6,7 @@ require_relative 'components/invader'
 
 # TODO:
 # 1. Implement rows & movements of invaders
-# 2. Implement missile launch system from ship
+# 2. Implement missile launch system from ship - done
 # 3. Implement missile launch system from invaders
 # 4. Score system
 # 5. Game start/pause/end system
@@ -35,6 +35,12 @@ class Game < Gosu::Window
       @ship.move_up if Gosu.button_down?(Gosu::KB_UP) || Gosu.button_down?(Gosu::GP_BUTTON_0)
 
       @missiles << @ship.fire if Gosu.button_down? Gosu::KB_SPACE
+
+      # if Gosu.button_down? Gosu::KB_F
+      #   @invaders.each do |invader|
+      #     @missiles << invader.fire
+      #   end
+      # end
 
       @invaders.each(&:move)
 

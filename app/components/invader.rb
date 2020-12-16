@@ -14,6 +14,10 @@ class Invader
     @y += @vel_y
   end
 
+  def fire
+    Missile.new(x: @x, y: @y, vel_y: 1)
+  end
+
   def draw
     @image.draw(@x, @y, 1)
   end
