@@ -5,10 +5,10 @@ require_relative 'components/ship'
 require_relative 'components/invader'
 
 # TODO:
-# 1. Implement rows & movements of invaders
+# 1. Implement rows & movements of invaders - done
 # 2. Implement missile launch system from ship - done
 # 3. Implement missile launch system from invaders - done
-# 4. Score system
+# 4. Score system - done
 # 5. Game start/pause/end system
 # 6. collision detection
 
@@ -19,7 +19,7 @@ class Game < Gosu::Window
 
     @ship = Ship.new
 
-    @invaders = 1.upto(5).map { {vel_x: 10, x: 0, y: 0, invaders: []} }
+    @invaders = 1.upto(5).map { { vel_x: 10, x: 0, y: 0, invaders: [] } }
 
     @invaders.each_with_index do |invader_row, idx|
       invader_row[:invaders] = 1.upto(10).map { |num| Invader.new(x: num * 30, y: idx * 30) }
@@ -28,6 +28,7 @@ class Game < Gosu::Window
     @missiles = []
     @paused = false
     @font = Gosu::Font.new(20)
+    @score = 0
   end
 
   def update
@@ -51,13 +52,11 @@ class Game < Gosu::Window
       @invaders.each do |invader_row|
         invader_row[:invaders].each(&:move)
         invader_row[:x] += invader_row[:vel_x]
-        if invader_row[:x] > 480 || invader_row[:x] < 0
-          invader_row[:invaders].each(&:reverse_x)
-          invader_row[:vel_x] = -invader_row[:vel_x]
-          if invader_row[:x] < 0
-            invader_row[:invaders].each(&:move_y)
-          end
-        end
+        next unless invader_row[:x] > 480 || invader_row[:x] < 0
+
+        invader_row[:invaders].each(&:reverse_x)
+        invader_row[:vel_x] = -invader_row[:vel_x]
+        invader_row[:invaders].each(&:move_y) if invader_row[:x] < 0
       end
 
       @missiles.each(&:move)
@@ -74,6 +73,8 @@ class Game < Gosu::Window
       end
 
       @missiles.each(&:draw)
+
+      @font.draw_text("Score \n #{@score}", 10, 10, 1)
     end
   end
 end
