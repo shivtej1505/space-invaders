@@ -18,44 +18,56 @@ class Game < Gosu::Window
     @ship = Ship.new
     @invaders = 1.upto(10).map {|num| Invader.new(x: num*30) }
     @missiles = []
+    @paused = false
+    @font = Gosu::Font.new(20)
   end
 
   def update
-    if Gosu.button_down? Gosu::KB_LEFT or Gosu::button_down? Gosu::GP_LEFT
-      @ship.move_left
-    end
-    if Gosu.button_down? Gosu::KB_RIGHT or Gosu::button_down? Gosu::GP_RIGHT
-      @ship.move_right
-    end
-    if Gosu.button_down? Gosu::KB_UP or Gosu::button_down? Gosu::GP_BUTTON_0
-      @ship.move_up
-    end
-
     if Gosu.button_down? Gosu::KB_ESCAPE
       exit
     end
 
-    if Gosu.button_down? Gosu::KB_SPACE
-      @missiles << @ship.fire
+    if Gosu.button_down? Gosu::KB_P
+      @paused = !@paused
     end
 
-    @invaders.each do |invader|
-      invader.move
-    end
+    if !@paused
+      if Gosu.button_down? Gosu::KB_LEFT or Gosu::button_down? Gosu::GP_LEFT
+        @ship.move_left
+      end
+      if Gosu.button_down? Gosu::KB_RIGHT or Gosu::button_down? Gosu::GP_RIGHT
+        @ship.move_right
+      end
+      if Gosu.button_down? Gosu::KB_UP or Gosu::button_down? Gosu::GP_BUTTON_0
+        @ship.move_up
+      end
 
-    @missiles.each do |missile|
-      missile.move
+      if Gosu.button_down? Gosu::KB_SPACE
+        @missiles << @ship.fire
+      end
+
+      @invaders.each do |invader|
+        invader.move
+      end
+
+      @missiles.each do |missile|
+        missile.move
+      end
     end
   end
 
   def draw
-    @ship.draw
-    @invaders.each do |invader|
-      invader.draw
-    end
+    if @paused
+      @font.draw_text("Paused", 100, 100, 1)
+    else
+      @ship.draw
+      @invaders.each do |invader|
+        invader.draw
+      end
 
-    @missiles.each do |missile|
-      missile.draw
+      @missiles.each do |missile|
+        missile.draw
+      end
     end
   end
 end
